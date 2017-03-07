@@ -1,0 +1,21 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=73:C1:92:46:5B:85:D8:4A:7E:04:C8:D1:47:C0:4A:0B:13:CC:15:F4%3Bin.rashtriyakaryadala.potholedetectionandlogging
+
+    You can also add your credentials to an existing key, using this line:
+    73:C1:92:46:5B:85:D8:4A:7E:04:C8:D1:47:C0:4A:0B:13:CC:15:F4;in.rashtriyakaryadala.potholedetectionandlogging
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyBBTwHUFCEQV_4nRkzBYbkIZ8YgRbwfPxg
+    </string>
+</resources>
