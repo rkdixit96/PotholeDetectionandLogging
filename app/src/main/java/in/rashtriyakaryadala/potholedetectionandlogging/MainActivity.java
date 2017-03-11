@@ -1,7 +1,7 @@
 package in.rashtriyakaryadala.potholedetectionandlogging;
 
 import android.Manifest;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,13 +21,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    TextView x, y, z, location1;
+    TextView x, y, z, location1, m1;
     float x_val;
+    int count = 0;
 
     Sensor accelerometer;
     SensorManager sm;
@@ -37,7 +38,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     DBHandler dbHandler;
 
-    final Location[] current = new Location[1];
+    Location current;
+
+
+
+
+
 
 
 
@@ -47,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         dbHandler = new DBHandler(this,null,null,1);
+
+
+        m1 = (TextView)findViewById(R.id.message);
+
+
 
 
         x = (TextView) findViewById(R.id.x);
@@ -66,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLocationChanged(Location location) {
                 location1 = (TextView)findViewById(R.id.location1);
                 location1.setText("Location:"+location.getLatitude()+" "+location.getLongitude());
-                current[0] = location;
+                current = location;
 
             }
 
@@ -113,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (event.values[2] > 30 )
+        {
+            count++;
+            m1.setText("Pothole Count = "+ Integer.toString(count));
+        }
+
         x.setText("x= "+event.values[0]);
         x_val = event.values[0];
         y.setText("y= "+event.values[1]);
@@ -127,10 +144,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void goToMaps(View view){
         Intent intent = new Intent(this, MapsActivity.class);
+        //Create the bundle
+        intent.putExtra("long",current.getLongitude());
+        intent.putExtra("lat",current.getLatitude());
         startActivity(intent);
     }
     public void saveLocation(View view){
-        dbHandler.addLocation(current[0]);
     }
+
+
 }
 
