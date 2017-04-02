@@ -17,74 +17,114 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/x" />
+        android:id="@+id/x"
+        android:layout_alignRight="@+id/y"
+        android:layout_alignEnd="@+id/y" />
 
     <TextView
         android:text="y="
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/y"
         android:layout_below="@+id/x"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp"
-        android:id="@+id/y"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toLeftOf="@+id/print"
+        android:layout_toStartOf="@+id/print" />
 
     <TextView
         android:text="z="
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/y"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp"
         android:id="@+id/z"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/y"
+        android:layout_toStartOf="@+id/print"
+        android:layout_alignRight="@+id/y"
+        android:layout_alignEnd="@+id/y" />
 
     <TextView
         android:text="Location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/location1"
-        android:layout_marginTop="41dp"
         android:layout_below="@+id/z"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="Map"
+        android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:id="@+id/map"
+        android:layout_marginTop="15dp"
         android:onClick="goToMaps"
-        android:layout_alignParentBottom="true"
+        android:text="MAP"
+        android:layout_below="@+id/location1"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="65dp"
-        android:layout_marginStart="65dp" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="SAVE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/map"
-        android:layout_toRightOf="@+id/map"
-        android:layout_toEndOf="@+id/map"
-        android:layout_marginLeft="51dp"
-        android:layout_marginStart="51dp"
         android:id="@+id/SAVE"
-        android:onClick="saveLocation" />
+        android:onClick="saveLocation"
+        android:layout_above="@+id/threshold"
+        android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="Pothole Count = 0"
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Pothole Database"
+        android:layout_below="@+id/threshold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/print"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/location1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="88dp"
-        android:id="@+id/message" />
+        android:onClick="printDB"
+        android:text="Get DB"
+        android:layout_above="@+id/threshold"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="deleteTable"
+        android:text="DELETE"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/threshold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Threshold"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setThreshold"
+        android:text="SET"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_alignBottom="@+id/threshold"
+        android:layout_toRightOf="@+id/threshold"
+        android:layout_toEndOf="@+id/threshold" />
 
 </RelativeLayout>

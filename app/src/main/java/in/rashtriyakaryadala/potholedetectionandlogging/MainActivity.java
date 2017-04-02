@@ -18,17 +18,20 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    TextView x, y, z, location1, m1;
-    float x_val;
-    int count = 0;
+    TextView x, y, z, location1, m1, result;
+    EditText thres;
+
+    double threshold = 30;
 
     Sensor accelerometer;
     SensorManager sm;
@@ -41,11 +44,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Location current;
 
 
-
-
-
-
-
+    long lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,22 +53,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         dbHandler = new DBHandler(this,null,null,1);
 
+        current = new Location("Dummy");
 
-        m1 = (TextView)findViewById(R.id.message);
-
-
+        current.setLatitude(13.00018011);
+        current.setLongitude(77.57287016);
 
 
         x = (TextView) findViewById(R.id.x);
         y = (TextView) findViewById(R.id.y);
         z = (TextView) findViewById(R.id.z);
 
+        thres = (EditText)findViewById(R.id.threshold);
+
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sm.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-
-        Button map = (Button) findViewById(R.id.map);
+        sm.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -124,17 +122,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.values[2] > 30 )
-        {
-            count++;
-            m1.setText("Pothole Count = "+ Integer.toString(count));
-        }
 
         x.setText("x= "+event.values[0]);
-        x_val = event.values[0];
         y.setText("y= "+event.values[1]);
         z.setText("z= "+event.values[2]);
 
+
+        //This is done to prevent multiple values above threshold being registered as multiple potholes
+        long actualTime = event.timestamp;
+        try{
+            if(actualTime - lastUpdate > 100000000) {
+                lastUpdate = actualTime;
+                if (event.values[2] > threshold) {
+                    Toast.makeText(getApplicationContext(),"Pothole Detected",Toast.LENGTH_SHORT).show();
+                    dbHandler.addLocation(current);
+                }
+            }
+        }
+        catch (Exception e){
+            lastUpdate = actualTime;
+        }
     }
 
     @Override
@@ -145,13 +152,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void goToMaps(View view){
         Intent intent = new Intent(this, MapsActivity.class);
         //Create the bundle
+        Log.i("Data", Double.toString(current.getLatitude()));
         intent.putExtra("long",current.getLongitude());
         intent.putExtra("lat",current.getLatitude());
         startActivity(intent);
     }
     public void saveLocation(View view){
+        dbHandler.addLocation(current);
+    }
+
+    public void printDB(View view){
+        result = (TextView)findViewById(R.id.result);
+        result.setText(dbHandler.printDataBase());
+    }
+
+    public void deleteTable(View view){
+        dbHandler.deleteTable();
+    }
+
+    public void setThreshold(View view){
+        try{
+            threshold = Double.parseDouble(thres.getText().toString());
+        }
+        catch (Exception e){
+        }
     }
 
 
 }
-
